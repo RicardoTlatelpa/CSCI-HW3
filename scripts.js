@@ -2,6 +2,7 @@ var dotFlag = false;
 var inputs = [];
 var last_operator = '';
 var lock = true;
+var calculate_lock = false;
 
 function queueLength(){
     return inputs.length;
@@ -40,7 +41,13 @@ function appendToResult(value){
         calculatorInput.value = value;
     }
     else if (calculatorInput && calculatorInput.value != "0"){
-        calculatorInput.value+=value;
+        if(calculate_lock){
+            calculate_lock = false;            
+            calculatorInput.value = value;
+        }
+        else{
+            calculatorInput.value+=value;
+        }        
     }
 }
 
@@ -53,7 +60,7 @@ function clearResult(){
 }
 
 function performOperation(n1,n2,operator){
-    console.log(n1,n2,operator)
+    console.log(n1,n2,operator) // test inputs perform operation performed
     if(operator == "+"){
         return n1 + n2;
     }
@@ -87,6 +94,7 @@ function handleOperation(operator){ // two states can come here
     }    
     console.log(newInput)
     if(newInput != false && !isNaN(newInput)){
+      calculate_lock = true;
       setInput(newInput);
     }
 }
